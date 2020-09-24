@@ -8,7 +8,7 @@ def index():
 
 @app.route('/home')
 def home():
-    return ''    
+    return '<h1> You are on the home page!</h1>'    
 
 if __name__ == '__main__':
     app.run(debug=True)    
