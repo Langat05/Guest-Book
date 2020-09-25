@@ -1,20 +1,22 @@
-from flask import Flask, render_template, request
-form flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy 
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://sql10367306:b2Lr6QMYap@sql10.freemysqlhosting.net/sql10367306'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-class Commnents(db.Model):
-	id = db.Column(db.Interger, primary_key=True)
-	name =  db.Column(db.String(40))
-	Commnent = db.Column(db.String(1000))
+class Comments(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(20))
+	comment = db.Column(db.String(1000))
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	result = Comments.query.all()
+
+	return render_template('index.html', result=result)
 
 @app.route('/sign')
 def sign():
@@ -25,7 +27,11 @@ def process():
 	name = request.form['name']
 	comment = request.form['comment']
 
-	return render_template('index.html', name=name, comment=comment)
+	signature = Comments(name=name, comment=comment)
+	db.session.add(signature)
+	db.session.commit()
+
+	return redirect(url_for('index'))
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
