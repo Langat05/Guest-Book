@@ -5,6 +5,12 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://sql10367306:b2Lr6QMYap@sql10.freemysqlhosting.net/sql10367306'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False
 
+db = SQLAlchemy(app)
+
+class Commnents(db.Model):
+	id = db.Column(db.Interger, primary_key=True)
+	name =  db.Column(db.String(40))
+	Commnent = db.Column(db.String(1000))
 
 @app.route('/')
 def index():
